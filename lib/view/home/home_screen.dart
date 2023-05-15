@@ -4,6 +4,7 @@ import 'package:branding/constant/font_style.dart';
 import 'package:branding/constant/image_path.dart';
 import 'package:branding/controller/home_controller.dart';
 import 'package:branding/view/business_screen/edit_post_screen.dart';
+import 'package:branding/view/home/privacy_policy.dart';
 import 'package:branding/view/home/view_images.dart';
 import 'package:branding/view/home/view_more_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -70,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             InkWell(
               onTap: () {
-                _scaffoldKey.currentState?.closeDrawer();
+                // _scaffoldKey.currentState?.closeDrawer();
+                Get.to(() => PrivacyPolicy());
               },
               child: Container(
                 height: 47.sp,
@@ -105,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             InkWell(
               onTap: () {
                 _scaffoldKey.currentState?.closeDrawer();
+                homeScreenController.launchReviewUrl();
               },
               child: Container(
                 height: 47.sp,

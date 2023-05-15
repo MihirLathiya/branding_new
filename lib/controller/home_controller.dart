@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeController extends GetxController {
   CarouselController carouselController = CarouselController();
@@ -112,6 +113,18 @@ class HomeController extends GetxController {
       ),
     );
     // _rewardedAd!.rewardedAdLoadCallback;
+  }
+
+  launchReviewUrl() async {
+    try {
+      final Uri url = Uri.parse(
+          'https://play.google.com/store/apps/dev?id=7876327308901418150');
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+      }
+    } catch (e) {
+      print('---ERROR---$e');
+    }
   }
 
   disposeAd() {
