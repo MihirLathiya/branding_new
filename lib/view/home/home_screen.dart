@@ -353,6 +353,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 13.sp,
                             ),
+
+                            /// BANNER AD
                             homeController.bannerAdIsLoaded && bannerAd != null
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -503,123 +505,203 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 24.sp,
                             ),
 
-                            /// Event 1
-                            if (data.length >= 1)
-                              HeadingTile(
-                                name: '${data[0]['eventName']}',
-                                viewMore: () {
-                                  Get.to(
-                                    () => ViewMoreImageScreen(
-                                      title: '${data[0]['eventName']}',
-                                      eventId: '${data[0]['docId']}',
-                                    ),
-                                  );
-                                },
-                              ),
-
-                            if (data.length >= 1)
-                              SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: BouncingScrollPhysics(),
-                                  child: StreamBuilder(
-                                    stream: FirebaseFirestore.instance
-                                        .collection('Events')
-                                        .doc(data[0].id)
-                                        .collection('Eventimage')
-                                        .snapshots(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<
-                                                QuerySnapshot<
-                                                    Map<String, dynamic>>>
-                                            snap) {
-                                      if (snap.hasData) {
-                                        return Row(
-                                          children: [
-                                            ...List.generate(
-                                              snap.data!.docs.length,
-                                              (index) {
-                                                var firstData = snap.data?.docs;
-                                                return Padding(
-                                                  padding: index == 0
-                                                      ? EdgeInsets.only(
-                                                          left: 16.sp,
-                                                          right: 8.sp)
-                                                      : EdgeInsets.symmetric(
-                                                          horizontal: 8.0.sp),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      List<String> images = [];
-                                                      for (int i = 0;
-                                                          i < firstData.length;
-                                                          i++) {
-                                                        images.add(firstData[i]
-                                                            ['image']);
-                                                      }
-                                                      Get.to(() =>
-                                                          EditPostScreen(
-                                                            imageLink:
-                                                                '${firstData[index]['image']}',
-                                                            graphicList: images,
-                                                            index: index,
-                                                          ));
-                                                    },
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.sp),
-                                                      child: CachedNetworkImage(
-                                                        height: 140.sp,
-                                                        width: 140.sp,
-                                                        imageUrl:
-                                                            '${firstData![index]['image']}',
-                                                        fit: BoxFit.cover,
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  15.0),
-                                                          child: Icon(Icons
-                                                              .error_outline),
-                                                        ),
-                                                        progressIndicatorBuilder:
-                                                            (context, url,
-                                                                    downloadProgress) =>
-                                                                Shimmer
-                                                                    .fromColors(
-                                                          baseColor: Colors.grey
-                                                              .withOpacity(0.4),
-                                                          highlightColor: Colors
-                                                              .grey
-                                                              .withOpacity(0.2),
-                                                          enabled: true,
-                                                          child: Container(
-                                                            color: Colors.white,
-                                                          ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: BouncingScrollPhysics(),
+                                    child: StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('Events')
+                                          .doc(data[index].id)
+                                          .collection('Eventimage')
+                                          .snapshots(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<
+                                                  QuerySnapshot<
+                                                      Map<String, dynamic>>>
+                                              snap) {
+                                        if (snap.hasData) {
+                                          return snap.data!.docs.length == 0
+                                              ? SizedBox()
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 10.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: Get.width,
+                                                        child: HeadingTile(
+                                                          name:
+                                                              '${data[index]['eventName']}',
+                                                          viewMore: () {
+                                                            Get.to(
+                                                              () =>
+                                                                  ViewMoreImageScreen(
+                                                                title:
+                                                                    '${data[index]['eventName']}',
+                                                                eventId:
+                                                                    '${data[index]['docId']}',
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
                                                       ),
-                                                    ),
+                                                      Row(
+                                                        children: [
+                                                          ...List.generate(
+                                                            snap.data!.docs
+                                                                .length,
+                                                            (index) {
+                                                              var firstData =
+                                                                  snap.data
+                                                                      ?.docs;
+                                                              return Padding(
+                                                                padding: index ==
+                                                                        0
+                                                                    ? EdgeInsets.only(
+                                                                        left: 16
+                                                                            .sp,
+                                                                        right: 8
+                                                                            .sp)
+                                                                    : EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            8.0.sp),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    List<String>
+                                                                        images =
+                                                                        [];
+                                                                    for (int i =
+                                                                            0;
+                                                                        i < firstData.length;
+                                                                        i++) {
+                                                                      images.add(
+                                                                          firstData[i]
+                                                                              [
+                                                                              'image']);
+                                                                    }
+                                                                    Get.to(() =>
+                                                                        EditPostScreen(
+                                                                          imageLink:
+                                                                              '${firstData[index]['image']}',
+                                                                          graphicList:
+                                                                              images,
+                                                                          index:
+                                                                              index,
+                                                                        ));
+                                                                  },
+                                                                  child:
+                                                                      ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20.sp),
+                                                                    child:
+                                                                        CachedNetworkImage(
+                                                                      height:
+                                                                          140.sp,
+                                                                      width: 140
+                                                                          .sp,
+                                                                      imageUrl:
+                                                                          '${firstData![index]['image']}',
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      errorWidget: (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          Padding(
+                                                                        padding:
+                                                                            EdgeInsets.all(15.0),
+                                                                        child: Icon(
+                                                                            Icons.error_outline),
+                                                                      ),
+                                                                      progressIndicatorBuilder: (context,
+                                                                              url,
+                                                                              downloadProgress) =>
+                                                                          Shimmer
+                                                                              .fromColors(
+                                                                        baseColor: Colors
+                                                                            .grey
+                                                                            .withOpacity(0.4),
+                                                                        highlightColor: Colors
+                                                                            .grey
+                                                                            .withOpacity(0.2),
+                                                                        enabled:
+                                                                            true,
+                                                                        child:
+                                                                            Container(
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ],
                                                   ),
                                                 );
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        return Center(
-                                          child: Text('Server Error'),
-                                        );
-                                      } else {
-                                        return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                    },
-                                  )),
-                            if (data.length >= 2)
+                                        } else if (snapshot.hasError) {
+                                          return Center(
+                                            child: Text('Server Error'),
+                                          );
+                                        } else {
+                                          return SizedBox();
+                                          /*    return Center(
+                                            child: CircularProgressIndicator(),
+                                          );*/
+                                        }
+                                      },
+                                    ));
+                              },
+                            ),
+
+                            /*   if (data.length >= 2)
                               SizedBox(
                                 height: 16.sp,
                               ),
+*/
+                            SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        ),
+                      );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Server Error'),
+                );
+              } else {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ],
+                );
+              }
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+/*
 
                             /// Event 2
                             if (data.length >= 2)
@@ -846,26 +928,4 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                 ),
                               ),
-
-                            SizedBox(
-                              height: 20,
-                            )
-                          ],
-                        ),
-                      );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Server Error'),
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          );
-        },
-      ),
-    );
-  }
-}
+*/

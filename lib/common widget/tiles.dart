@@ -15,12 +15,13 @@ class HeadingTile extends StatelessWidget {
     return Padding(
       padding: AppConstant.commonPadding,
       child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             name!,
             style: FontTextStyle.kBlack18W600Poppins,
           ),
-          Spacer(),
           TextButton(
             onPressed: viewMore,
             child: Text(

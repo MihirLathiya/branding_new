@@ -5,13 +5,11 @@ import 'package:branding/constant/font_style.dart';
 import 'package:branding/controller/download_controller.dart';
 import 'package:branding/hive_model/boxes/boxes.dart';
 import 'package:branding/hive_model/download.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 
 class DownloadScreen extends StatelessWidget {
   DownloadScreen({Key? key}) : super(key: key);
@@ -34,7 +32,7 @@ class DownloadScreen extends StatelessWidget {
               var data = value.values.toList().cast<DownloadImageModel>();
 
               return data.isEmpty
-                  ? SizedBox()
+                  ? Center(child: Text('No Data',style: TextStyle(fontSize: 15),))
                   : MasonryGridView.count(
                       physics: BouncingScrollPhysics(),
                       crossAxisCount: 2,
